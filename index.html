@@ -82,7 +82,7 @@
       </div>
       <div class="code-area">
         <textarea rows="20" class="input" id="code" autofocus>
-print("Hello World")
+print("Hello world")
         </textarea>
         <textarea id="output" style="width: 100%; height: 60px;"></textarea>
         <br /><br />
@@ -90,14 +90,28 @@ print("Hello World")
           onclick="runPython(this)"
           style="background-color: rgb(28, 145, 180);"
         >
-          Python
+          Run Code
         </button>
-        <br /><br />
-        <span id="results"></span>
+        <button
+          onclick="saveFile(this)"
+          style="background-color: rgb(12, 136, 68);"
+        >
+          Save Result
+        </button>
       </div>
     </div>
 
     <script type="text/javascript">
+      // document.getElementById("code").onkeyup = function(e) {
+      //   var evt = e ? e : event;
+      //   if ((evt.keyCode && evt.keyCode != 13) || evt.which != 13) return;
+      //   var elm = evt.target ? evt.target : evt.srcElement;
+      //   var lines = elm.value.split("\n");
+      //   for (var i = 0; i < lines.length; i++)
+      //     lines[i] = lines[i].replace(/(\d+\.\s|^)/, ">> ");
+      //   elm.value = lines.join("\n");
+      // };
+
       var control = document.getElementById("myFile");
       control.addEventListener(
         "change",
@@ -118,6 +132,29 @@ print("Hello World")
         false
       );
 
+      function saveFile() {
+        var code = document.getElementById("code");
+        var output = document.getElementById("output");
+
+        let data = "Code: " + code.value + " \r\n " + "Result: " + output.value;
+
+        const textToBLOB = new Blob([data], { type: "text/plain" });
+        const sFileName = "code.txt"; // The file to save the data.
+
+        let newLink = document.createElement("a");
+        newLink.download = sFileName;
+
+        if (window.webkitURL != null) {
+          newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+        } else {
+          newLink.href = window.URL.createObjectURL(textToBLOB);
+          newLink.style.display = "none";
+          document.body.appendChild(newLink);
+        }
+
+        newLink.click();
+      }
+
       function outf(text) {
         var mypre = document.getElementById("output");
         mypre.innerHTML = mypre.innerHTML + text;
@@ -132,13 +169,15 @@ print("Hello World")
       }
       function runPython(btn) {
         var prog = document.getElementById("code").value;
+        var newProg = prog.split(">> ").join("");
         var output = document.getElementById("output");
         output.innerHTML = "";
         Sk.configure({ output: outf, read: builtinRead });
         try {
-          Sk.importMainWithBody("<stdin>", false, prog);
+          Sk.importMainWithBody("<stdin>", false, newProg);
         } catch (e) {
-          alert(e);
+          var mypre = document.getElementById("output");
+          mypre.innerHTML = mypre.innerHTML + e;
         }
       }
     </script>
