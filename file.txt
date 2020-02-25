@@ -1,0 +1,4 @@
+def calculate(x,y):
+   print x / y
+
+calculate(6,5)
