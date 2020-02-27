@@ -2,14 +2,14 @@ from input_code import solution
 
 def get_test_cases():
     return {
-        "SMALL_INPUT": [1, 2, 3],
-        "LARGE_INPUT": [1, 2, 3] * 1000 + [4],
+        "SMALL_INPUT": [1, 2, 3, 4],
+        "LARGE_INPUT": [100, 200, 3000],
     }
 
 def get_expected_outputs():
     return {
-        "SMALL_INPUT": 3,
-        "LARGE_INPUT": 4,
+        "SMALL_INPUT": 4,
+        "LARGE_INPUT": 3000,
     }
 
 def test_code():
